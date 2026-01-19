@@ -16,9 +16,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class AderaPosTelegramBot extends TelegramLongPollingBot {
+
+    private static final Logger logger = LoggerFactory.getLogger(AderaPosTelegramBot.class);
 
     @Value("${aderapos.telegram.bot-token}")
     private String botToken;
@@ -28,6 +32,9 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
 
     @Value("${aderapos.api.base-url}")
     private String baseUrl;
+
+    @Value("${aderapos.telegram.miniapp-url}")
+    private String miniAppUrl;
 
     private final Map<Long, UserSession> sessions = new HashMap<>();
     private final RestTemplate restTemplate = new RestTemplate();
@@ -75,10 +82,17 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
             InlineKeyboardButton.builder().text("Products").callbackData("menu_products").build(),
             InlineKeyboardButton.builder().text("Help").callbackData("menu_help").build()
         ));
+        // Add mobile launcher button using property
+        rows.add(List.of(
+            InlineKeyboardButton.builder()
+                .text("Open Mobile POS")
+                .url(miniAppUrl)
+                .build()
+        ));
         markup.setKeyboard(rows);
         SendMessage msg = new SendMessage(chatId.toString(), welcome);
         msg.setReplyMarkup(markup);
-        try { execute(msg); } catch (TelegramApiException e) { e.printStackTrace(); }
+        try { execute(msg); } catch (TelegramApiException e) { logger.error("Telegram sendMainMenu failed", e); }
     }
 
     // --- Command Handlers ---
@@ -105,7 +119,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
                     session.state = BotState.AWAITING_PHONE;
                     sendText(chatId, "Please login first. Enter your phone number:");
                 } else {
-                    showInvoices(chatId, session.jwt);
+                    showInvoices(chatId);
                 }
             }
             case "/products" -> {
@@ -113,7 +127,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
                     session.state = BotState.AWAITING_PHONE;
                     sendText(chatId, "Please login first. Enter your phone number:");
                 } else {
-                    listProducts(chatId, session.jwt);
+                    listProducts(chatId);
                 }
             }
             default -> sendText(chatId, "Unknown command. Use /start");
@@ -152,27 +166,30 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
                 s.state = BotState.AWAITING_PHONE;
                 sendText(chatId, "Please login first. Enter your phone number:");
             } else {
-                showInvoices(chatId, s.jwt);
+                showInvoices(chatId);
             }
         } else if (data.equals("menu_products")) {
             if (s.jwt == null) {
                 s.state = BotState.AWAITING_PHONE;
                 sendText(chatId, "Please login first. Enter your phone number:");
             } else {
-                listProducts(chatId, s.jwt);
+                listProducts(chatId);
             }
         }
         answerCallback(cb.getId());
     }
 
     private void sendHelp(Long chatId) {
-        String help = "Available commands:\n" +
-                "/start - Login or show main menu\n" +
-                "/create_sale - Create a new sale\n" +
-                "/invoice - View your invoices\n" +
-                "/products - List available products\n" +
-                "/help - Show this help message\n" +
-                "\nYou can also use the menu buttons.";
+        String help = """
+Available commands:
+/start - Login or show main menu
+/create_sale - Create a new sale
+/invoice - View your invoices
+/products - List available products
+/help - Show this help message
+
+You can also use the menu buttons.
+""";
         sendText(chatId, help);
     }
 
@@ -263,10 +280,10 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
 
     private void handlePassword(Long chatId, String text, UserSession session) {
         session.password = text;
-        Map<String, String> loginReq = Map.of("username", session.phone, "password", session.password);
+        Map<String, Object> loginReq = Map.of("username", session.phone, "password", session.password);
         try {
-            ResponseEntity<Map> resp = restTemplate.postForEntity(
-                baseUrl + "/auth/login", loginReq, Map.class);
+            ResponseEntity<Map<String, Object>> resp = restTemplate.postForEntity(
+                baseUrl + "/auth/login", loginReq, (Class<Map<String, Object>>)(Class<?>)Map.class);
             if (resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null && resp.getBody().get("token") != null) {
                 session.jwt = (String) resp.getBody().get("token");
                 session.state = BotState.IDLE;
@@ -277,6 +294,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
                 sendText(chatId, "Login failed. Would you like to register? (yes/no)");
             }
         } catch (Exception e) {
+            logger.error("Login failed", e);
             session.state = BotState.AWAITING_REGISTRATION;
             sendText(chatId, "Login failed. Would you like to register? (yes/no)");
         }
@@ -294,7 +312,9 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
                 sendText(chatId, "Registration successful! Please /start to login.");
                 session.state = BotState.IDLE;
             } catch (Exception e) {
-                sendText(chatId, "Registration failed. Please try again or contact support.");
+                logger.error("Registration failed", e);
+                String errorMsg = e.getMessage();
+                sendText(chatId, "Registration failed: " + (errorMsg != null ? errorMsg : "Please try again or contact support."));
                 session.state = BotState.IDLE;
             }
         } else {
@@ -314,8 +334,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
         try {
             execute(msg);
         } catch (TelegramApiException e) {
-            // In production, use a logger
-            e.printStackTrace();
+            logger.error("Telegram sendText failed", e);
         }
     }
 
@@ -328,7 +347,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
         return h;
     }
 
-    private void showInvoices(Long chatId, String jwt) {
+    private void showInvoices(Long chatId) {
         try {
             Object[] invoices = restTemplate.exchange(
                 baseUrl + "/api/telegram/invoices",
@@ -338,11 +357,12 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
             ).getBody();
             sendText(chatId, "Invoices found: " + (invoices != null ? invoices.length : 0));
         } catch (Exception e) {
+            logger.error("Failed to fetch invoices", e);
             sendText(chatId, "Failed to fetch invoices. Please login again.");
         }
     }
 
-    private void listProducts(Long chatId, String jwt) {
+    private void listProducts(Long chatId) {
         try {
             ProductDTO[] products = restTemplate.exchange(
                     baseUrl + "/api/products",
@@ -358,6 +378,7 @@ public class AderaPosTelegramBot extends TelegramLongPollingBot {
             }
             sendText(chatId, sb.toString());
         } catch (Exception e) {
+            logger.error("Failed to fetch products", e);
             sendText(chatId, "Failed to fetch products. Please login again.");
         }
     }
