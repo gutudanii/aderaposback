@@ -614,3 +614,123 @@ java.net.SocketTimeoutException: Read timed out
 2026-02-04T07:24:01.273+03:00  INFO 69151 --- [AderaPOS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-02-04T07:24:01.275+03:00  INFO 69151 --- [AderaPOS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-02-04T07:24:01.278+03:00  INFO 69151 --- [AderaPOS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-02-04T07:29:44.519+03:00  INFO 70765 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Starting AderaPosApplication using Java 21.0.8 with PID 70765 (/Users/gutudanielgeleta/Downloads/aderapos/target/classes started by gutudanielgeleta in /Users/gutudanielgeleta/Downloads/aderapos)
+2026-02-04T07:29:44.521+03:00 DEBUG 70765 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Running with Spring Boot v4.0.1, Spring v7.0.2
+2026-02-04T07:29:44.522+03:00  INFO 70765 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-02-04T07:29:45.004+03:00  INFO 70765 --- [AderaPOS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-04T07:29:45.044+03:00  INFO 70765 --- [AderaPOS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 10 JPA repository interfaces.
+2026-02-04T07:29:45.332+03:00  INFO 70765 --- [AderaPOS] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-02-04T07:29:45.339+03:00  INFO 70765 --- [AderaPOS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-04T07:29:45.340+03:00  INFO 70765 --- [AderaPOS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-02-04T07:29:45.370+03:00  INFO 70765 --- [AderaPOS] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 819 ms
+2026-02-04T07:29:45.406+03:00 DEBUG 70765 --- [AderaPOS] [main] c.a.a.s.auth.JwtAuthenticationFilter     : Filter 'jwtAuthenticationFilter' configured for use
+2026-02-04T07:29:45.466+03:00  INFO 70765 --- [AderaPOS] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-02-04T07:29:45.495+03:00  INFO 70765 --- [AderaPOS] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.0.Final
+2026-02-04T07:29:45.707+03:00  INFO 70765 --- [AderaPOS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-04T07:29:45.724+03:00  INFO 70765 --- [AderaPOS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-04T07:29:45.800+03:00  INFO 70765 --- [AderaPOS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@309cf657
+2026-02-04T07:29:45.800+03:00  INFO 70765 --- [AderaPOS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-04T07:29:45.829+03:00  WARN 70765 --- [AderaPOS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-04T07:29:45.845+03:00  INFO 70765 --- [AderaPOS] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/aderapos_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.11
+	Default catalog/schema: aderapos_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-04T07:29:46.457+03:00  INFO 70765 --- [AderaPOS] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-04T07:29:46.549+03:00  INFO 70765 --- [AderaPOS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-04T07:29:46.591+03:00  INFO 70765 --- [AderaPOS] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-02-04T07:29:46.791+03:00  INFO 70765 --- [AderaPOS] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-02-04T07:29:48.005+03:00  INFO 70765 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Using default implementation for ThreadExecutor
+2026-02-04T07:29:48.011+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2026-02-04T07:29:48.011+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v2.5.2 created.
+2026-02-04T07:29:48.012+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2026-02-04T07:29:48.012+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.5.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-02-04T07:29:48.012+03:00  INFO 70765 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2026-02-04T07:29:48.012+03:00  INFO 70765 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Quartz scheduler version: 2.5.2
+2026-02-04T07:29:48.012+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@e18848d
+2026-02-04T07:29:48.049+03:00  INFO 70765 --- [AderaPOS] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/aderapos'
+2026-02-04T07:29:48.050+03:00  INFO 70765 --- [AderaPOS] [main] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2026-02-04T07:29:48.050+03:00  INFO 70765 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2026-02-04T07:29:48.054+03:00  INFO 70765 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Started AderaPosApplication in 3.815 seconds (process running for 4.164)
+2026-02-04T07:30:23.118+03:00  INFO 70765 --- [AderaPOS] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/aderapos]      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-04T07:30:23.119+03:00  INFO 70765 --- [AderaPOS] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-04T07:30:23.123+03:00  INFO 70765 --- [AderaPOS] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-02-04T07:31:05.115+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-04T07:31:05.118+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-04T07:31:05.124+03:00  INFO 70765 --- [AderaPOS] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-02-04T07:31:05.127+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] o.s.s.quartz.SchedulerFactoryBean        : Shutting down Quartz Scheduler
+2026-02-04T07:31:05.128+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2026-02-04T07:31:05.128+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-04T07:31:05.128+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-02-04T07:31:05.130+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-04T07:31:05.133+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-02-04T07:31:05.135+03:00  INFO 70765 --- [AderaPOS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-02-04T12:30:58.799+03:00  INFO 74355 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Starting AderaPosApplication using Java 21.0.8 with PID 74355 (/Users/gutudanielgeleta/Downloads/aderapos/target/classes started by gutudanielgeleta in /Users/gutudanielgeleta/Downloads/aderapos)
+2026-02-04T12:30:58.802+03:00 DEBUG 74355 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Running with Spring Boot v4.0.1, Spring v7.0.2
+2026-02-04T12:30:58.802+03:00  INFO 74355 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-02-04T12:30:59.852+03:00  INFO 74355 --- [AderaPOS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-04T12:30:59.896+03:00  INFO 74355 --- [AderaPOS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 37 ms. Found 10 JPA repository interfaces.
+2026-02-04T12:31:00.198+03:00  INFO 74355 --- [AderaPOS] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-02-04T12:31:00.207+03:00  INFO 74355 --- [AderaPOS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-04T12:31:00.208+03:00  INFO 74355 --- [AderaPOS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-02-04T12:31:00.250+03:00  INFO 74355 --- [AderaPOS] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1385 ms
+2026-02-04T12:31:00.294+03:00 DEBUG 74355 --- [AderaPOS] [main] c.a.a.s.auth.JwtAuthenticationFilter     : Filter 'jwtAuthenticationFilter' configured for use
+2026-02-04T12:31:00.373+03:00  INFO 74355 --- [AderaPOS] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-02-04T12:31:00.413+03:00  INFO 74355 --- [AderaPOS] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.0.Final
+2026-02-04T12:31:00.683+03:00  INFO 74355 --- [AderaPOS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-04T12:31:00.705+03:00  INFO 74355 --- [AderaPOS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-02-04T12:31:00.763+03:00  INFO 74355 --- [AderaPOS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1d7f7962
+2026-02-04T12:31:00.764+03:00  INFO 74355 --- [AderaPOS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-02-04T12:31:00.789+03:00  WARN 74355 --- [AderaPOS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-04T12:31:00.804+03:00  INFO 74355 --- [AderaPOS] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/aderapos_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 16.11
+	Default catalog/schema: aderapos_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-04T12:31:01.397+03:00  INFO 74355 --- [AderaPOS] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-04T12:31:01.485+03:00  INFO 74355 --- [AderaPOS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-04T12:31:01.533+03:00  INFO 74355 --- [AderaPOS] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-02-04T12:31:01.796+03:00  INFO 74355 --- [AderaPOS] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-02-04T12:31:03.665+03:00  INFO 74355 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Using default implementation for ThreadExecutor
+2026-02-04T12:31:03.670+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2026-02-04T12:31:03.670+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v2.5.2 created.
+2026-02-04T12:31:03.670+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2026-02-04T12:31:03.671+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.5.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-02-04T12:31:03.671+03:00  INFO 74355 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2026-02-04T12:31:03.671+03:00  INFO 74355 --- [AderaPOS] [main] hedulerFactoryBean$LocalSchedulerFactory : Quartz scheduler version: 2.5.2
+2026-02-04T12:31:03.671+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@e18848d
+2026-02-04T12:31:03.705+03:00  INFO 74355 --- [AderaPOS] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/aderapos'
+2026-02-04T12:31:03.706+03:00  INFO 74355 --- [AderaPOS] [main] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2026-02-04T12:31:03.706+03:00  INFO 74355 --- [AderaPOS] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2026-02-04T12:31:03.714+03:00  INFO 74355 --- [AderaPOS] [main] com.adera.aderapos.AderaPosApplication   : Started AderaPosApplication in 5.842 seconds (process running for 6.676)
+2026-02-04T12:31:07.839+03:00  INFO 74355 --- [AderaPOS] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/aderapos]      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-04T12:31:07.839+03:00  INFO 74355 --- [AderaPOS] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-04T12:31:07.840+03:00  INFO 74355 --- [AderaPOS] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

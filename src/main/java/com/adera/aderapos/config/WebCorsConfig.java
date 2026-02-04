@@ -27,7 +27,7 @@ public class WebCorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("http://localhost:3000", "https://aderapos.netlify.app/")
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);

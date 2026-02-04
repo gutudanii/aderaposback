@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global Exception Handler Class
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ApiException.class)

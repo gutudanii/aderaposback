@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Service for logging audit events.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuditService {
