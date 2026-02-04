@@ -72,7 +72,7 @@ public class JwtTokenProvider {
     public UUID getShopId(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token).getBody();
-        return claims.get("shopId", UUID.class);
+        return UUID.fromString(claims.get("shopId", String.class));
     }
 
     /**

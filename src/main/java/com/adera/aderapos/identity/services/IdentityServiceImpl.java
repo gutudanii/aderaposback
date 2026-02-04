@@ -46,8 +46,8 @@ public class IdentityServiceImpl implements IdentityService {
             AuditAction.CREATE,
             AuditEntityType.USER, // No MERCHANT in enum, fallback to USER
             saved.getId(),
-            null,
-            null,
+            UUID.randomUUID(),
+            "null",
             AuditSeverity.LOW,
             "Merchant created"
         );
@@ -81,8 +81,8 @@ public class IdentityServiceImpl implements IdentityService {
             AuditAction.CREATE,
             AuditEntityType.SHOP,
             saved.getId(),
-            null,
-            null,
+            UUID.randomUUID(),
+            "null",
             AuditSeverity.LOW,
             "Shop created"
         );

@@ -16,6 +16,7 @@ public class MerchantMapper {
      */
     public static MerchantDTO toDTO(Merchant merchant) {
         return MerchantDTO.builder()
+                .merchantId(merchant.getId())
                 .name(merchant.getName())
                 .tin(merchant.getTin())
                 .email(merchant.getEmail())

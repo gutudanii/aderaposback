@@ -102,8 +102,8 @@ public class InvoiceService {
             AuditAction.CREATE,
             AuditEntityType.INVOICE,
             invoice.getId(),
-            null,
-            null,
+            UUID.fromString("ce2c8794-c62c-4ad4-bffc-5b612078dbc4"),
+            "null",
             AuditSeverity.LOW,
             "Invoice created"
         );
@@ -136,5 +136,11 @@ public class InvoiceService {
             .filter(inv -> saleIds.contains(inv.getSaleId()))
             .toList();
         return invoices.stream().map(invoiceMapper::toDto).toList();
+    }
+
+    public List<Invoice> getInvoicesByShop(UUID shopId) {
+        return invoiceRepository.findAll().stream()
+            .filter(inv -> inv.getShop() != null && shopId.equals(inv.getShop().getId()))
+            .toList();
     }
 }

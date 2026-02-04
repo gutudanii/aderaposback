@@ -4,6 +4,7 @@ import com.adera.aderapos.identity.entities.Shop;
 import com.adera.aderapos.identity.repositories.ShopRepository;
 import com.adera.aderapos.product.dtos.InventoryDTO;
 import com.adera.aderapos.product.dtos.ProductDTO;
+import com.adera.aderapos.product.dtos.ProductRequestDTO;
 import com.adera.aderapos.product.entities.Inventory;
 import com.adera.aderapos.product.entities.Product;
 import com.adera.aderapos.product.repositories.InventoryRepository;
@@ -20,6 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
@@ -31,39 +36,75 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final AuditService auditService;
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+
     /**
-     * Creates or updates a product.
+     * Creates a new product using the ProductRequestDTO.
+     * This method is used for clean product creation requests, omitting id and audit fields.
      *
-     * @param dto the product DTO
-     * @return the created or updated product DTO
+     * @param dto the product request DTO
+     * @return the created product DTO
      */
     @Transactional
-    @Override
-    public ProductDTO createOrUpdateProduct(ProductDTO dto) {
-        UUID shopId = dto.getShopId() != null ? dto.getShopId() : SecurityUtils.getCurrentShopId();
-        if (shopId == null) throw new RuntimeException("Shop ID is required");
-        Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new RuntimeException("Shop not found"));
-        Product product = productMapper.toEntity(dto);
-        product.setShop(shop);
-        String currentUser = SecurityUtils.getCurrentUserId();
-        if (currentUser == null) throw new RuntimeException("User not authenticated");
-        if (product.getCreatedAt() == null) {
-            product.setCreatedAt(java.time.Instant.now());
-            product.setCreatedBy(currentUser);
+    public ProductDTO createProduct(ProductRequestDTO dto) {
+        logger.info("[ProductServiceImpl] createProduct called with: {}", dto);
+        if (dto == null) {
+            logger.error("ProductRequestDTO must not be null");
+            throw new IllegalArgumentException("ProductRequestDTO must not be null");
         }
-        product.setUpdatedAt(java.time.Instant.now());
-        product.setUpdatedBy(currentUser);
+        UUID shopId = dto.getShopId() != null ? dto.getShopId() : SecurityUtils.getCurrentShopId();
+        if (shopId == null) {
+            logger.error("Shop ID is required");
+            throw new RuntimeException("Shop ID is required");
+        }
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> {
+                    logger.error("Shop not found for id: {}", shopId);
+                    return new RuntimeException("Shop not found");
+                });
+        // SKU uniqueness check per shop
+        if (productRepository.findByShop(shop).stream().anyMatch(p -> p.getSku().equals(dto.getSku()))) {
+            logger.error("SKU '{}' already exists in shop {}", dto.getSku(), shopId);
+            throw new RuntimeException("SKU already exists in this shop");
+        }
+        Product product = Product.builder()
+                .shop(shop)
+                .name(dto.getName())
+                .sku(dto.getSku())
+                .description(dto.getDescription())
+                .unitPrice(dto.getUnitPrice())
+                .active(dto.getActive() != null ? dto.getActive() : Boolean.TRUE)
+                .createdAt(java.time.Instant.now())
+                .createdBy(SecurityUtils.getCurrentUserId())
+                .updatedAt(java.time.Instant.now())
+                .updatedBy(SecurityUtils.getCurrentUserId())
+                .build();
+        logger.debug("Saving new product: name={}, sku={}, shopId={}", product.getName(), product.getSku(), product.getShop() != null ? product.getShop().getId() : null);
         Product saved = productRepository.save(product);
+        logger.info("Product saved with id: {}", saved.getId());
+        // Create Inventory for new product
+        Inventory inventory = Inventory.builder()
+                .product(saved)
+                .quantity(dto.getInitialQuantity() != null ? dto.getInitialQuantity() : 0)
+                .reserved(0)
+                .createdAt(java.time.Instant.now())
+                .createdBy(SecurityUtils.getCurrentUserId())
+                .updatedAt(java.time.Instant.now())
+                .updatedBy(SecurityUtils.getCurrentUserId())
+                .build();
+        inventoryRepository.save(inventory);
+        logger.info("Inventory created for product id: {}", saved.getId());
         auditService.log(
             AuditAction.CREATE,
             AuditEntityType.PRODUCT,
             saved.getId(),
-            UUID.fromString(currentUser),
-            null, // No user role available
+            UUID.randomUUID(),
+            "null",
             AuditSeverity.LOW,
             "Product created"
         );
+        logger.info("Audit log created for product id: {}", saved.getId());
         return productMapper.toDto(saved);
     }
 
@@ -77,7 +118,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO getProduct(UUID id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-        return productMapper.toDto(product);
+        Inventory inventory = inventoryRepository.findByProduct(product)
+                .orElseThrow(() -> new RuntimeException("Inventory not found for product"));
+        ProductDTO productDTO = productMapper.toDto(product);
+        productDTO.setQuantity(inventory.getQuantity());
+        return productDTO;
     }
 
     /**
@@ -91,7 +136,14 @@ public class ProductServiceImpl implements ProductService {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new RuntimeException("Shop not found"));
         List<Product> products = productRepository.findByShop(shop);
-        return productMapper.toProductDtoList(products);
+        List<ProductDTO> productDTOs = products.stream().map(product -> {
+            Inventory inventory = inventoryRepository.findByProduct(product)
+                    .orElseThrow(() -> new RuntimeException("Inventory not found for product"));
+            ProductDTO dto = productMapper.toDto(product);
+            dto.setQuantity(inventory.getQuantity());
+            return dto;
+        }).collect(Collectors.toList());
+        return productDTOs;
     }
 
     /**
@@ -187,6 +239,32 @@ public class ProductServiceImpl implements ProductService {
         String currentUser = SecurityUtils.getCurrentUserId();
         product.setUpdatedBy(currentUser);
         Product updated = productRepository.save(product);
+
+        // Handle inventory quantity update if provided
+        if (dto.getQuantity() != 0) {
+            Inventory inventory = inventoryRepository.findByProduct(product)
+                    .orElseThrow(() -> new RuntimeException("Inventory not found for product"));
+            int newQuantity = dto.getQuantity();
+            if (newQuantity < 0) {
+                throw new RuntimeException("Quantity cannot be negative");
+            }
+            int oldQuantity = inventory.getQuantity();
+            inventory.setQuantity(newQuantity);
+            inventory.setUpdatedAt(java.time.Instant.now());
+            inventory.setUpdatedBy(currentUser);
+            inventoryRepository.save(inventory);
+            logger.info("Inventory updated for product id {}: {} -> {}", product.getId(), oldQuantity, newQuantity);
+            auditService.log(
+                AuditAction.UPDATE,
+                AuditEntityType.PRODUCT,
+                updated.getId(),
+                currentUser != null ? UUID.fromString(currentUser) : null,
+                null,
+                AuditSeverity.LOW,
+                "Product inventory updated"
+            );
+        }
+
         auditService.log(
             AuditAction.UPDATE,
             AuditEntityType.PRODUCT,

@@ -16,6 +16,7 @@ public class ShopMapper {
      */
     public static ShopDTO toDTO(Shop shop) {
         return ShopDTO.builder()
+                .shopId(shop.getId())
                 .name(shop.getName())
                 .merchantId(shop.getMerchant() != null ? shop.getMerchant().getId() : null)
                 .build();

@@ -20,10 +20,12 @@ public class Shop {
     @Column(nullable = false)
     private String name;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "merchant_id")
     private Merchant merchant;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private List<AppUser> users;
 

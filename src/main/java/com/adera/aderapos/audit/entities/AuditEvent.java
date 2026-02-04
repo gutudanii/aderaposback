@@ -35,7 +35,6 @@ public class AuditEvent {
     @Column(nullable = false)
     private UUID entityId;
 
-    @Column(nullable = false)
     private UUID actorId;
 
     @Column(nullable = false)

@@ -25,6 +25,7 @@ public class Merchant {
 
     private String email;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL)
     private List<Shop> shops;
 

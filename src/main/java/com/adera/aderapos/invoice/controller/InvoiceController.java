@@ -47,4 +47,10 @@ public class InvoiceController {
         List<Invoice> invoices = invoiceService.getAllInvoices();
         return ResponseEntity.ok(invoices.stream().map(invoiceMapper::toDto).toList());
     }
+
+    @GetMapping("/by-shop/{shopId}")
+    public ResponseEntity<List<InvoiceDTO>> getInvoicesByShop(@PathVariable UUID shopId) {
+        List<Invoice> invoices = invoiceService.getInvoicesByShop(shopId);
+        return ResponseEntity.ok(invoices.stream().map(invoiceMapper::toDto).toList());
+    }
 }
