@@ -61,8 +61,8 @@ public class SaleServiceImpl implements SaleService{
     @Override
     public SaleDTO createSale(SaleDTO saleDTO) {
         log.info("Creating sale for shopId={}, userId={}", saleDTO.getShopId(), SecurityUtils.getCurrentUserId());
-//        UUID userId = UUID.fromString(SecurityUtils.getCurrentUserId());
-        UUID userId = UUID.fromString("ce2c8794-c62c-4ad4-bffc-5b612078dbc4"); // Temporary for testing without security
+        UUID userId = UUID.fromString(SecurityUtils.getCurrentUserId());
+//        UUID userId = UUID.fromString("ce2c8794-c62c-4ad4-bffc-5b612078dbc4"); // Temporary for testing without security
         AppUser user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Shop shop = shopRepository.findById(saleDTO.getShopId())
